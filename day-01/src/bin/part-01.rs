@@ -1,5 +1,4 @@
-use std::fmt::{format, Error};
-
+use std::fmt::Error;
 fn main() {
     let input = include_str!("./input-01.txt");
     println!("Part 1: {}", p1(input).unwrap());
