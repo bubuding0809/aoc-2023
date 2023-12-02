@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::Error};
+use std::{collections::HashMap, fmt::Error, ops::Index};
 fn main() {
     let input = include_str!("./input-02.txt");
     println!("Part 2: {}", p1(input).unwrap());
@@ -22,16 +22,30 @@ fn p1(input: &str) -> Result<String, Error> {
         .map(|line| {
             let mut digits = String::new();
 
+            // V1
             for i in 0..line.len() {
-                for j in i..line.len() {
-                    let curr = &line[i..=j];
-                    if let Ok(d) = curr.parse::<u32>() {
-                        digits.push_str(&d.to_string())
-                    } else if digit_map.contains_key(curr) {
-                        digits.push_str(digit_map.get(curr).unwrap())
-                    }
+                for (k, v) in digit_map.iter() {
+                    if let Some(c) = line.chars().nth(i).unwrap().to_digit(10) {
+                        digits.push_str(c.to_string().as_str())
+                    };
+                    if line[i..].starts_with(k) {
+                        digits.push_str(v)
+                    };
                 }
             }
+
+            // V2df
+            // for i in 0..line.len() {
+            //     for j in i..line.len() {
+            //         let curr = &line[i..=j];
+            //         if let Ok(d) = curr.parse::<u32>() {
+            //             digits.push_str(&d.to_string())
+            //         } else if digit_map.contains_key(curr) {
+            //             digits.push_str(digit_map.get(curr).unwrap())
+            //         }
+            //     }
+            // }
+
             let first = digits.chars().next().expect("Should be first digit");
             let second = digits.chars().last().expect("Should be last digit");
 

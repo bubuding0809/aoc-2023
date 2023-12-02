@@ -8,19 +8,15 @@ fn p1(input: &str) -> Result<String, Error> {
     let res: u32 = input
         .lines()
         .map(|line| {
-            let digits = line.chars().fold(String::new(), |acc, curr| {
-                if curr.is_ascii_digit() {
-                    format!("{acc}{curr}")
-                } else {
-                    acc
-                }
-            });
+            let mut it = line.chars().filter_map(|c| c.to_digit(10));
 
-            let first_digit = digits.chars().next().expect("Should be first digit");
-            let last_digit = digits.chars().last().expect("Should be last digit");
-            format!("{}{}", first_digit, last_digit)
-                .parse::<u32>()
-                .unwrap()
+            let first = it.next().expect("first digit");
+            match it.last() {
+                Some(last) => format!("{first}{last}"),
+                None => format!("{first}{first}"),
+            }
+            .parse::<u32>()
+            .unwrap_or_default()
         })
         .sum();
 
