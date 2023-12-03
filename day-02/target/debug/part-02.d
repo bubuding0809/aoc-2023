@@ -1,0 +1,1 @@
+/Users/dingruoqian/Desktop/c/advent-of-code/day-02/target/debug/part-02: /Users/dingruoqian/Desktop/c/advent-of-code/day-02/src/bin/input-01.txt /Users/dingruoqian/Desktop/c/advent-of-code/day-02/src/bin/part-02.rs
