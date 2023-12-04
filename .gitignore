@@ -1,0 +1,17 @@
+# Compiled files
+/target/
+**/target/
+
+
+
+# Dependency directories
+Cargo.lock
+Cargo.toml.orig
+Cargo.toml.bkp
+
+# Generated documentation
+/doc/
+
+# IDE files
+.idea/
+.vscode/
