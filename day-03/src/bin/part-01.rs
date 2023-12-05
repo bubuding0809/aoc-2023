@@ -1,3 +1,5 @@
+use std::ops::ControlFlow;
+
 fn main() {
     let input = include_str!("./input.txt");
     let output = p1(input);
@@ -52,13 +54,13 @@ fn p1(input: &str) -> String {
 
 fn process_input(input: &str) -> Vec<Vec<(char, bool)>> {
     input
-        .split("\n")
+        .split('\n')
         .map(|line| line.chars().map(|c| (c, false)).collect())
         .collect()
 }
 
 fn is_symbol(c: &char) -> bool {
-    !c.is_digit(10) && *c != '.'
+    !c.is_ascii_digit() && *c != '.'
 }
 
 fn search_adj(i: usize, j: usize, grid: &mut Vec<Vec<(char, bool)>>) {
@@ -102,24 +104,24 @@ fn search_adj(i: usize, j: usize, grid: &mut Vec<Vec<(char, bool)>>) {
     }
 }
 
-fn scan_left(row: &mut Vec<(char, bool)>, index: usize) {
-    for i in (0..index).rev() {
-        if row[i].0.is_ascii_digit() {
-            row[i].1 = true;
-        } else {
-            break;
+fn scan_left(row: &mut [(char, bool)], index: usize) {
+    row.iter_mut().take(index).rev().try_for_each(|col| {
+        if !col.0.is_ascii_digit() {
+            return ControlFlow::Break(());
         }
-    }
+        col.1 = true;
+        ControlFlow::Continue(())
+    });
 }
 
-fn scan_right(row: &mut Vec<(char, bool)>, index: usize) {
-    for i in index + 1..row.len() {
-        if row[i].0.is_ascii_digit() {
-            row[i].1 = true;
-        } else {
-            break;
+fn scan_right(row: &mut [(char, bool)], index: usize) {
+    row.iter_mut().skip(index + 1).try_for_each(|col| {
+        if !col.0.is_ascii_digit() {
+            return ControlFlow::Break(());
         }
-    }
+        col.1 = true;
+        ControlFlow::Continue(())
+    });
 }
 
 #[cfg(test)]

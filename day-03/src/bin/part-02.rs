@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, ops::ControlFlow};
 
 fn main() {
     let input = include_str!("./input.txt");
@@ -36,8 +36,8 @@ fn p2(input: &str) -> String {
 
 fn process_input(input: &str) -> Vec<Vec<char>> {
     input
-        .split("\n")
-        .map(|line| line.chars().map(|c| c).collect())
+        .split('\n')
+        .map(|line| line.chars().collect())
         .collect()
 }
 
@@ -84,7 +84,7 @@ fn get_adj_nums(i: usize, j: usize, grid: &mut Vec<Vec<char>>) -> Vec<u32> {
         .collect::<Vec<u32>>()
 }
 
-fn scan_left(row: &mut Vec<char>, num: &mut VecDeque<char>, index: usize) {
+fn scan_left(row: &mut [char], num: &mut VecDeque<char>, index: usize) {
     for i in (0..index).rev() {
         if row[i].is_ascii_digit() {
             num.push_front(row[i]);
@@ -95,15 +95,16 @@ fn scan_left(row: &mut Vec<char>, num: &mut VecDeque<char>, index: usize) {
     }
 }
 
-fn scan_right(row: &mut Vec<char>, num: &mut VecDeque<char>, index: usize) {
-    for i in index + 1..row.len() {
-        if row[i].is_ascii_digit() {
-            num.push_back(row[i]);
-            row[i] = '#';
+fn scan_right(row: &mut [char], num: &mut VecDeque<char>, index: usize) {
+    row.iter_mut().skip(index + 1).try_for_each(|col| {
+        if !col.is_ascii_digit() {
+            ControlFlow::Break(())
         } else {
-            break;
+            num.push_back(*col);
+            *col = '#';
+            ControlFlow::Continue(())
         }
-    }
+    });
 }
 
 #[cfg(test)]
