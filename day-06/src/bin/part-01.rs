@@ -25,7 +25,7 @@ fn p1(input: &str) -> String {
     let res: f64 = zip(time_vals_it, dist_vals_it)
         .map(|(t, d)| {
             let (b, a, c) = (t as f64, -1_f64, -f64::try_from(d).unwrap());
-            let (s, e) = solve_quad_form(b, a, c);
+            let (s, e) = get_x_limits(b, a, c);
 
             if s == (s as u32) as f64 && e == (e as u32) as f64 {
                 e.floor() - s.ceil() + 1.0 - 2.0 // Remove 2 since both are ints
@@ -38,7 +38,7 @@ fn p1(input: &str) -> String {
     res.to_string()
 }
 
-fn solve_quad_form(b: f64, a: f64, c: f64) -> (f64, f64) {
+fn get_x_limits(b: f64, a: f64, c: f64) -> (f64, f64) {
     let x1 = (-b + (f64::sqrt(f64::powi(b, 2) - 4.0 * a * c))) / (2.0 * a);
     let x2 = (-b - (f64::sqrt(f64::powi(b, 2) - 4.0 * a * c))) / (2.0 * a);
 
@@ -62,6 +62,6 @@ mod tests {
 
     #[test]
     fn test_quad_form() {
-        assert_eq!(solve_quad_form(7.0, -1.0, -9.0), (2.0, 5.0))
+        assert_eq!(get_x_limits(7.0, -1.0, -9.0), (2.0, 5.0))
     }
 }
