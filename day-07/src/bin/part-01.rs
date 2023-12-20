@@ -27,9 +27,14 @@ impl HandType {
             acc
         });
 
-        let max_freq = freqs.iter().max_by_key(|(_, v)| (*v)).unwrap().1;
+        let max_freq_pair = freqs.iter().max_by_key(|(_, v)| (*v)).unwrap();
+        let max_count = if *max_freq_pair.0 == &"J".to_string() {
+            max_freq_pair.1 + freqs.get(&"J".to_string()).unwrap()
+        } else {
+            *max_freq_pair.1
+        };
 
-        match max_freq {
+        match max_count {
             // Check for Five of a kind and Four of a kind
             5 => HandType::FiveOfAKind(6),
             4 => HandType::FourOfAKind(5),
@@ -101,11 +106,11 @@ fn p1(input: &str) -> String {
     );
 
     let card_vals: HashMap<String, u32> = HashMap::from([
-        (String::from("A"), 14),
-        (String::from("K"), 13),
-        (String::from("Q"), 12),
-        (String::from("J"), 11),
+        (String::from("A"), 13),
+        (String::from("K"), 12),
+        (String::from("Q"), 11),
         (String::from("T"), 10),
+        (String::from("J"), 1),
     ]);
 
     let res: u32 = type_groups
